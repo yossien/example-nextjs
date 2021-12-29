@@ -1,7 +1,8 @@
 import { Button } from '@mui/material'
 import { SelectedItemCategoryContext } from '../../contexts/SelectedItemCategoryContext'
 import { useContext } from 'react'
-import styles from './itemCategoryButton.module.css'
+import styles from './itemCategoryButton.module.scss'
+const buttonStyles = styles.button
 
 interface Props {
   id: number
@@ -14,11 +15,6 @@ const ItemCategoryButton = ({ id, itemCategoryName, isSelected }: Props) => {
   return (
     <Button
       className={styles.button}
-      style={{
-        borderColor: 'lightblue',
-        borderStyle: 'solid',
-        fontSize: '1.2rem',
-      }}
       variant={isSelected ? 'contained' : 'outlined'}
       onClick={() => {
         setSelectedId(isSelected ? null : id)

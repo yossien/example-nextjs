@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@mui/material'
 import { imagePath } from '../../src/util/imagePath'
-import styles from './itemBox.module.css'
+import styles from './itemBox.module.scss'
 
 interface ItemProps {
   itemName: string
