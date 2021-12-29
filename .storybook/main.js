@@ -1,5 +1,8 @@
 const path = require('path')
 module.exports = {
+  core: {
+    builder: 'webpack5',
+  },
   stories: [
     '../src/**/*.stories.mdx',
     '../src/**/*.stories.@(js|jsx|ts|tsx)',
@@ -12,27 +15,22 @@ module.exports = {
   env: {
     devImageRoot: '/images',
   },
-  /* for react module css enabled
+  // for react module css enabled
   webpackFinal: (config) => {
-    // remove existing css rule
-    config.module.rules = config.module.rules.filter((rule) => {
-      return rule.test.toString() !== '/\\.css$/'
-    })
-
     config.module.rules.push({
-      test: '/\\.css$/',
-      use: [
-        'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            modules: true,
-          },
-        },
-      ],
+      test: /\.module\.scss$/,
+      use: ['style-loader', 'css-loader?modules=true', 'sass-loader'],
       include: path.resolve(__dirname, '../components'),
     })
+
+    /*
+    config.module.rules.push({
+      test: /\.scss$/,
+      use: ['style-loader', 'css-loader', 'sass-loader'],
+      include: path.resolve(__dirname, '../'),
+    })
+     */
+
     return config
   },
-   */
 }

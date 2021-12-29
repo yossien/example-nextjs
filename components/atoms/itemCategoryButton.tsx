@@ -2,7 +2,6 @@ import { Button } from '@mui/material'
 import { SelectedItemCategoryContext } from '../../contexts/SelectedItemCategoryContext'
 import { useContext } from 'react'
 import styles from './itemCategoryButton.module.scss'
-const buttonStyles = styles.button
 
 interface Props {
   id: number
