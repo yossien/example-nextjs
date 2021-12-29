@@ -1,0 +1,366 @@
+openapi: 3.1.0
+info:
+  title: v1.0
+  version: '1.0'
+  description: example project
+  contact: your email
+servers:
+  - description: ''
+paths:
+  '/users/{userId}':
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+        description: Id of an existing user.
+    get:
+      summary: Get User Info by User ID
+      tags: []
+      responses:
+        '200':
+          description: User Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Get User Alice Smith:
+                  value:
+                    id: 142
+                    firstName: Alice
+                    lastName: Smith
+                    email: alice.smith@gmail.com
+                    dateOfBirth: '1997-10-31'
+                    emailVerified: true
+                    signUpDate: '2019-08-24'
+        '404':
+          description: User Not Found
+      operationId: get-users-userId
+      description: Retrieve the information of the user with the matching user ID.
+    patch:
+      tags: []
+      summary: Update User Information
+      operationId: patch-users-userId
+      responses:
+        '200':
+          description: User Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Updated User Rebecca Baker:
+                  value:
+                    id: 13
+                    firstName: Rebecca
+                    lastName: Baker
+                    email: rebecca@gmail.com
+                    dateOfBirth: '1985-10-02'
+                    emailVerified: false
+                    createDate: '2019-08-24'
+        '404':
+          description: User Not Found
+        '409':
+          description: Email Already Taken
+      description: Update the information of an existing user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                  description: 'If a new email is given, the user''s email verified property will be set to false.'
+                dateOfBirth:
+                  type: string
+            examples:
+              Update First Name:
+                value:
+                  firstName: Rebecca
+              Update Email:
+                value:
+                  email: rebecca@gmail.com
+              Update Last Name & Date of Birth:
+                value:
+                  lastName: Baker
+                  dateOfBirth: '1985-10-02'
+        description: Patch user properties to update.
+  /user:
+    post:
+      tags: []
+      summary: Create New User
+      operationId: post-user
+      responses:
+        '200':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                New User Bob Fellow:
+                  value:
+                    id: 12
+                    firstName: Bob
+                    lastName: Fellow
+                    email: bob.fellow@gmail.com
+                    dateOfBirth: '1996-08-24'
+                    emailVerified: false
+                    createDate: '2020-11-18'
+        '400':
+          description: Missing Required Information
+        '409':
+          description: Email Already Taken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                dateOfBirth:
+                  type: string
+                  format: date
+              required:
+                - firstName
+                - lastName
+                - email
+                - dateOfBirth
+            examples:
+              Create User Bob Fellow:
+                value:
+                  firstName: Bob
+                  lastName: Fellow
+                  email: bob.fellow@gmail.com
+                  dateOfBirth: '1996-08-24'
+        description: Post the necessary fields for the API to create a new user.
+      description: Create a new user.
+  '/items/{category-id}':
+    get:
+      summary: GetItemList
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  maxPage:
+                    type: integer
+                  page:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Item'
+              examples:
+                example-1:
+                  value:
+                    maxPage: 3
+                    page: 1
+                    items:
+                      - id: 1
+                        name: マグロ赤身握り
+                        description: |-
+                          すし屋の看板などとされているマグロのなかでも本鮪（クロマグロ類）に次ぐ高級ネタである。本鮪よりも味はほんの少し軽く、酸味も控えめだという人もいるが、残念なことに、まだ食べても両種の違いは判然としない。
+                          　古今亭志ん生は「まぐろの刺身」が好きだったというが、いつも「刺身」は中トロと決めていたともいう。確かに脂ののり、マグロらしい味わいともにバランス良く楽しめる。名人が好きなのもうなずける気がする。
+                          　混在する脂の上品でほんのりと甘いことや、ほどよい口溶け感、そして酸味とうま味とどれをとっても申し分がない。
+                          　すし飯との相性、馴染みも抜群にいいために、握りとしての完成度も高すぎるくらいだ。
+                        imagePath: 22081274_s.jpg
+                        categoryId: 1
+                      - id: 2
+                        name: かっぱ巻き
+                        description: |-
+                          岩手県に「 遠野とうの」と言うきゅうりの名産地があります。
+                          ここには昔からかっぱが住んでいると言われていました。
+
+                          かっぱは、川や池に住んでいるため、常に体が湿った状態です。
+                          そのため、陸に上がると皮膚が乾燥して、頭頂部のお皿が割れて力を失ったり体温が上昇してしまう為きゅうりを体中に巻き付けていたと言われています。
+                          (冬野菜は体を温め、きゅうりなどの夏野菜は体を冷やす効果があります)
+
+                          かっぱが、きゅうりを体に巻いていたことから、きゅうり巻きを「かっぱ巻き」と呼ばれるようになったようです。
+
+                          余談ですが、きゅうりの断面を見るとかっぱの頭(お皿)のように見えますよね。
+                        imagePath: 4910466_s.jpg
+                        categoryId: 2
+      parameters:
+        - schema:
+            type: integer
+            minimum: 1
+          in: query
+          name: page
+      description: get items by category id
+      operationId: getItems
+    operationId: get-items
+    parameters:
+      - schema:
+          type: integer
+        name: category-id
+        in: path
+        description: filtered category id
+        required: true
+  /items:
+    get:
+      description: get all items
+      summary: get all items
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  maxPage:
+                    type: integer
+                  page:
+                    type: number
+                  items:
+                    $ref: '#/components/schemas/Item'
+              examples:
+                example-1:
+                  value:
+                    maxPage: 10
+                    page: 1
+                    items:
+                      - id: 1
+                        name: マグロ赤身握り
+                        description: |-
+                          すし屋の看板などとされているマグロのなかでも本鮪（クロマグロ類）に次ぐ高級ネタである。本鮪よりも味はほんの少し軽く、酸味も控えめだという人もいるが、残念なことに、まだ食べても両種の違いは判然としない。
+                          　古今亭志ん生は「まぐろの刺身」が好きだったというが、いつも「刺身」は中トロと決めていたともいう。確かに脂ののり、マグロらしい味わいともにバランス良く楽しめる。名人が好きなのもうなずける気がする。
+                          　混在する脂の上品でほんのりと甘いことや、ほどよい口溶け感、そして酸味とうま味とどれをとっても申し分がない。
+                          　すし飯との相性、馴染みも抜群にいいために、握りとしての完成度も高すぎるくらいだ。
+                        imagePath: 22081274_s.jpg
+                        categoryId: 1
+                      - id: 2
+                        name: かっぱ巻き
+                        description: |-
+                          岩手県に「 遠野とうの」と言うきゅうりの名産地があります。
+                          ここには昔からかっぱが住んでいると言われていました。
+
+                          かっぱは、川や池に住んでいるため、常に体が湿った状態です。
+                          そのため、陸に上がると皮膚が乾燥して、頭頂部のお皿が割れて力を失ったり体温が上昇してしまう為きゅうりを体中に巻き付けていたと言われています。
+                          (冬野菜は体を温め、きゅうりなどの夏野菜は体を冷やす効果があります)
+
+                          かっぱが、きゅうりを体に巻いていたことから、きゅうり巻きを「かっぱ巻き」と呼ばれるようになったようです。
+
+                          余談ですが、きゅうりの断面を見るとかっぱの頭(お皿)のように見えますよね。
+                        imagePath: 4910466_s.jpg
+                        categoryId: 2
+      operationId: get-items
+      parameters:
+        - schema:
+            type: integer
+            minimum: 1
+          in: query
+          name: page
+          description: target page no
+  /itemCategories:
+    get:
+      description: get all item categories
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemCategory'
+              examples:
+                example-1:
+                  value:
+                    - id: 1
+                      name: 握り
+                      orderNo: 1
+                    - id: 2
+                      name: 巻き寿司
+                      orderNo: 2
+                    - id: 3
+                      name: 一品料理
+                      orderNo: 3
+                    - id: 4
+                      name: ドリンク
+                      orderNo: 4
+      operationId: get-itemCategories
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      description: ''
+      examples:
+        - id: 142
+          firstName: Alice
+          lastName: Smith
+          email: alice.smith@gmail.com
+          dateOfBirth: '1997-10-31'
+          emailVerified: true
+          signUpDate: '2019-08-24'
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the given user.
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1997-10-31'
+        emailVerified:
+          type: boolean
+          description: Set to true if the user's email has been verified.
+        createDate:
+          type: string
+          format: date
+          description: The date that the user was created.
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - emailVerified
+    Item:
+      title: Item
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        imagePath:
+          type: string
+    ItemCategory:
+      title: ItemCategory
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        orderNo:
+          type: number
