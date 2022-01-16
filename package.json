@@ -12,7 +12,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "prism": "prism mock ./api/reference/v1.0.yaml",
-    "test": "jest --ci"
+    "test": "jest --ci",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@emotion/cache": "^11.7.1",
@@ -48,6 +49,7 @@
     "concurrently": "^6.5.1",
     "cross-env": "^7.0.3",
     "cspell": "^5.13.3",
+    "cypress": "^9.2.1",
     "eslint": "8.4.1",
     "eslint-config-next": "12.0.7",
     "eslint-plugin-compat": "^4.0.0",
