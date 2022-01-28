@@ -1,44 +1,77 @@
 import { ItemType } from '../../src/types/itemType'
-import { useState } from 'react'
-import { Checkbox, FormControlLabel, MenuItem, Select } from '@mui/material'
+import { useEffect, useState } from 'react'
+import {
+  Checkbox,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@mui/material'
 
 interface Props {
   label: string
   itemList: ItemType[]
 }
+
+const notSelectedItem: ItemType = {
+  id: -1,
+  name: '選択なし',
+  categoryId: -1,
+  description: '',
+  imagePath: '',
+}
+
 const ItemSelector = ({ label, itemList }: Props) => {
-  const [item, setItem] = useState<ItemType | undefined>(undefined)
+  const [itemId, setItemId] = useState<number>(-1)
+  const [item, setItem] = useState<ItemType>(notSelectedItem)
   const [wasabi, setWasabi] = useState<boolean>(false)
 
-  const setItemById = (id: string) => {
-    const f = itemList.filter((i) => {
-      return !isNaN(parseInt(id)) && i.id === parseInt(id)
+  const selectItem = [notSelectedItem, ...itemList]
+
+  const getItemById = () => {
+    const f = itemList.filter((item) => {
+      return itemId == item.id
     })
-    const _item = f.length === 1 ? f[0] : undefined
-    setItem(_item)
+    return f.length === 1 ? f[0] : notSelectedItem
   }
+
+  useEffect(() => {
+    setItem(getItemById)
+  }, [itemId])
 
   return (
     <>
       <div style={{ margin: '3rem' }}>
         選択したメニュー :
-        <span style={{ margin: '0 3rem', color: 'green' }}>
-          {`${item ? item.name : '選択なし'}`}{' '}
+        <span
+          style={{
+            margin: '0 3rem',
+            color: `${itemId !== notSelectedItem.id ? 'green' : 'gray'}`,
+          }}
+        >
+          {`${item.name}  `}
         </span>
         <span style={{ color: `${wasabi ? 'red' : 'gray'}` }}>{`サビ ${
           wasabi ? 'あり' : 'なし'
         }`}</span>
       </div>
+      <InputLabel id="item-selector-label"> {`item ${label}`}</InputLabel>
       <Select
+        labelId="item-selector-label"
+        id="item-selector"
         label={`item ${label}`}
-        onChange={(e) => setItemById(e.target.value as string)}
-        variant={'outlined'}
-        style={{ minWidth: '10rem', marginRight: '2rem' }}
+        onChange={(e) => setItemId(e.target.value as number)}
+        variant="outlined"
+        value={itemId}
+        style={{
+          width: '18rem',
+          marginRight: '2rem',
+          color: `${itemId !== notSelectedItem.id ? 'green' : 'gray'}`,
+        }}
       >
-        <MenuItem key="-1" value="" />
-        {itemList.map((item, i) => (
-          <MenuItem key={i} value={item.id}>
-            {item.name}
+        {selectItem.map((_item) => (
+          <MenuItem key={_item.id} value={_item.id}>
+            {_item.name}
           </MenuItem>
         ))}
       </Select>
