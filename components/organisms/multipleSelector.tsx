@@ -1,6 +1,6 @@
 import { ItemCategoryType } from '../../src/types/ItemCategoryType'
 import { ItemType } from '../../src/types/itemType'
-import { InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 interface Props {
@@ -65,49 +65,55 @@ const MultipleSelector = ({ itemCategoryList, itemList }: Props) => {
     <>
       <div>
         {/* category selector */}
-        <InputLabel id="category-selector-label">category</InputLabel>
-        <Select
-          labelId="category-selector-label"
-          label="category"
-          value={categoryId}
-          placeholder="select item category"
-          style={{
-            minWidth: '10rem',
-            color: `${categoryId !== notSelectCategory.id ? 'green' : 'gray'}`,
-          }}
-          variant="outlined"
-          onChange={(e) => {
-            setCategoryId(e.target.value as number)
-          }}
-        >
-          {selectCategory.map((c, index) => (
-            <MenuItem key={index} value={c.id}>
-              {c.name}
-            </MenuItem>
-          ))}
-        </Select>
+        <FormControl sx={{ m: 1, minWidth: '10rem' }}>
+          <InputLabel id="category-selector-label">category</InputLabel>
+          <Select
+            labelId="category-selector-label"
+            label="category"
+            value={categoryId}
+            placeholder="select item category"
+            style={{
+              minWidth: '10rem',
+              color: `${
+                categoryId !== notSelectCategory.id ? 'green' : 'gray'
+              }`,
+            }}
+            variant="outlined"
+            onChange={(e) => {
+              setCategoryId(e.target.value as number)
+            }}
+          >
+            {selectCategory.map((c, index) => (
+              <MenuItem key={index} value={c.id}>
+                {c.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         {/* item selector */}
-        <InputLabel id="item-selector-label">item</InputLabel>
-        <Select
-          labelId="item-selector-label"
-          label="item"
-          value={itemId}
-          placeholder="select item"
-          style={{
-            minWidth: '10rem',
-            color: `${itemId !== notSelectItem.id ? 'blue' : 'gray'}`,
-          }}
-          variant="outlined"
-          onChange={(e) => {
-            setItemId(e.target.value as number)
-          }}
-        >
-          {selectItemByCategoryId.map((i, index) => (
-            <MenuItem key={index} value={i.id}>
-              {i.name}
-            </MenuItem>
-          ))}
-        </Select>
+        <FormControl sx={{ m: 1, minWidth: '12rem' }}>
+          <InputLabel id="item-selector-label">item</InputLabel>
+          <Select
+            labelId="item-selector-label"
+            label="item"
+            value={itemId}
+            placeholder="select item"
+            style={{
+              minWidth: '10rem',
+              color: `${itemId !== notSelectItem.id ? 'blue' : 'gray'}`,
+            }}
+            variant="outlined"
+            onChange={(e) => {
+              setItemId(e.target.value as number)
+            }}
+          >
+            {selectItemByCategoryId.map((i, index) => (
+              <MenuItem key={index} value={i.id}>
+                {i.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </div>
       {/* state display */}
       <div style={{ marginTop: '2rem' }}>
